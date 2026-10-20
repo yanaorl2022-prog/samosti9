@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Самоконтроль знань - Хімічний склад клітини</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .matching-section {
+            margin-top: 15px;
+        }
+
+        .matching-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .matching-item label {
+            flex: 1;
+            font-size: 0.95em;
+        }
+
+        .matching-item select {
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            min-width: 200px;
+        }
+
+        .matching-item select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .reset-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .reset-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-3px);
+        }
+
+        .result {
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.success {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .result.warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .result h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Самоконтроль знань з теми 1</h1>
+        <p class="subtitle">Хімічний склад клітини</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Питання 1 -->
+            <div class="question">
+                <div class="question-number">Питання 1</div>
+                <div class="question-text">Чому вміст одного й того самого хімічного елемента може суттєво відрізнятися в різних групах живих організмів?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="a">
+                        <span>а) через різний розмір клітин у цих організмах</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="b">
+                        <span>б) через умовність класифікації елементів та особливості будови організмів</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="c">
+                        <span>в) через вплив навколишнього середовища на кожен окремий організм</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="d">
+                        <span>г) через те, що деякі елементи трапляються лише в рослин, а інші — лише у тварин</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Питання 2 -->
+            <div class="question">
+                <div class="question-number">Питання 2</div>
+                <div class="question-text">Яка з наведених властивостей води є ключовою для її здатності бути універсальним розчинником для багатьох біологічно важливих речовин?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="a">
+                        <span>а) висока теплоємність</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="b">
+                        <span>б) висока теплота випаровування</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="c">
+                        <span>в) полярність молекули</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="d">
+                        <span>г) здатність до дисоціації</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Питання 3 -->
+            <div class="question">
+                <div class="question-number">Питання 3</div>
+                <div class="question-text">Які йони відіграють ключову роль у створенні мембранного потенціалу, необхідного для передавання нервових імпульсів та роботи м'язів?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="a">
+                        <span>а) кальцій (Ca²⁺) та магній (Mg²⁺)</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="b">
+                        <span>б) фосфат (PO₄³⁻) та сульфат (SO₄²⁻)</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="c">
+                        <span>в) калій (K) та натрій (Na⁺)</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="d">
+                        <span>г) хлорид (Cl⁻) та гідрокарбонат (HCO₃)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Питання 4 -->
+            <div class="question">
+                <div class="question-number">Питання 4</div>
+                <div class="question-text">Які з перелічених малих органічних молекул є мономерами для білків?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q4" value="a">
+                        <span>а) моносахариди</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="b">
+                        <span>б) нуклеотиди</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="c">
+                        <span>в) амінокислоти</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="d">
+                        <span>г) жирні кислоти</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Питання 5 -->
+            <div class="question">
+                <div class="question-number">Питання 5</div>
+                <div class="question-text">Яка основна роль ферментів у біохімічних реакціях?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q5" value="a">
+                        <span>а) здатні забезпечувати необхідну енергію для протікання реакції</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="b">
+                        <span>б) здатні повністю витрачатися під час реакції</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="c">
+                        <span>в) здатні значно знижувати енергію активації, необхідну для протікання реакції</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="d">
+                        <span>г) здатні безпосередньо змінювати хімічну природу реагентів</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Питання 6 -->
+            <div class="question">
+                <div class="question-number">Питання 6</div>
+                <div class="question-text">Увідповідніть кожну характеристику з класом біомолекул:</div>
+                <div class="matching-section">
+                    <div class="matching-item">
+                        <label>а) ці полімери відповідають за зберігання та передачу спадкової інформації у клітинах</label>
+                        <select name="q6a">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) білки</option>
+                            <option value="2">2) вуглеводи</option>
+                            <option value="3">3) ліпіди</option>
+                            <option value="4">4) нуклеїнові кислоти</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>б) до цієї групи належать речовини, що є основним джерелом енергії, а також формують клітинні стінки в рослин</label>
+                        <select name="q6b">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) білки</option>
+                            <option value="2">2) вуглеводи</option>
+                            <option value="3">3) ліпіди</option>
+                            <option value="4">4) нуклеїнові кислоти</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>в) ці органічні сполуки відіграють ключову роль у каталізі біохімічних реакцій і є основними компонентами м'язів, волосся та нігтів</label>
+                        <select name="q6c">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) білки</option>
+                            <option value="2">2) вуглеводи</option>
+                            <option value="3">3) ліпіди</option>
+                            <option value="4">4) нуклеїнові кислоти</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>г) характеризуються неполярністю та нерозчинністю у воді, утворюють біліпідний шар мембран</label>
+                        <select name="q6d">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) білки</option>
+                            <option value="2">2) вуглеводи</option>
+                            <option value="3">3) ліпіди</option>
+                            <option value="4">4) нуклеїнові кислоти</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Питання 7 -->
+            <div class="question">
+                <div class="question-number">Питання 7</div>
+                <div class="question-text">Увідповідніть кожне твердження з класом неклетинних форм життя або їхньою ключовою складовою:</div>
+                <div class="matching-section">
+                    <div class="matching-item">
+                        <label>а) складаються виключно з аномально згорнутих білків і не містять нуклеїнових кислот</label>
+                        <select name="q7a">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) віруси</option>
+                            <option value="2">2) віроїди</option>
+                            <option value="3">3) пріони</option>
+                            <option value="4">4) суперкапсид</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>б) являють собою некодуючу білка одноланцюгову кільцеву молекулу РНК і вражають лише рослинні клітини</label>
+                        <select name="q7b">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) віруси</option>
+                            <option value="2">2) віроїди</option>
+                            <option value="3">3) пріони</option>
+                            <option value="4">4) суперкапсид</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>в) містять білок та власний генетичний матеріал (ДНК або РНК) і можуть розмножуватися лише всередині живих клітин</label>
+                        <select name="q7c">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) віруси</option>
+                            <option value="2">2) віроїди</option>
+                            <option value="3">3) пріони</option>
+                            <option value="4">4) суперкапсид</option>
+                        </select>
+                    </div>
+                    <div class="matching-item">
+                        <label>г) зовнішня додаткова оболонка деяких вірусів, що утворюється з фрагментів клітинної мембрани хазяїна</label>
+                        <select name="q7d">
+                            <option value="">-- Оберіть --</option>
+                            <option value="1">1) віруси</option>
+                            <option value="2">2) віроїди</option>
+                            <option value="3">3) пріони</option>
+                            <option value="4">4) суперкапсид</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="check-btn" onclick="checkAnswers()">Перевірити відповіді</button>
+                <button type="button" class="reset-btn" onclick="resetQuiz()">Скинути</button>
+            </div>
+        </form>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle"></h2>
+            <p id="resultText"></p>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'c',
+            q2: 'c',
+            q3: 'c',
+            q4: 'c',
+            q5: 'c',
+            q6a: '4',
+            q6b: '2',
+            q6c: '1',
+            q6d: '3',
+            q7a: '3',
+            q7b: '2',
+            q7c: '1',
+            q7d: '4'
+        };
+
+        // Додаємо обробники подій для візуального виділення обраних варіантів
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Знімаємо виділення з інших варіантів у тому ж питанні
+                const question = this.closest('.question');
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                this.classList.add('selected');
+                updateProgress();
+            });
+        });
+
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', updateProgress);
+        });
+
+        function updateProgress() {
+            const totalQuestions = 13;
+            let answered = 0;
+
+            // Перевіряємо радіокнопки
+            for (let i = 1; i <= 5; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answered++;
+                }
+            }
+
+            // Перевіряємо select
+            for (let i = 6; i <= 7; i++) {
+                ['a', 'b', 'c', 'd'].forEach(letter => {
+                    const select = document.querySelector(`select[name="q${i}${letter}"]`);
+                    if (select && select.value) {
+                        answered++;
+                    }
+                });
+            }
+
+            const progress = (answered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            let total = 13;
+
+            // Перевіряємо радіокнопки
+            for (let i = 1; i <= 5; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const options = document.querySelectorAll(`input[name="q${i}"]`);
+                
+                options.forEach(option => {
+                    const parentLabel = option.closest('.option');
+                    parentLabel.classList.remove('correct', 'incorrect');
+                    
+                    if (option.value === correctAnswers[`q${i}`]) {
+                        parentLabel.classList.add('correct');
+                    } else if (option.checked && option.value !== correctAnswers[`q${i}`]) {
+                        parentLabel.classList.add('incorrect');
+                    }
+                });
+
+                if (selected && selected.value === correctAnswers[`q${i}`]) {
+                    correct++;
+                }
+            }
+
+            // Перевіряємо select
+            for (let i = 6; i <= 7; i++) {
+                ['a', 'b', 'c', 'd'].forEach(letter => {
+                    const select = document.querySelector(`select[name="q${i}${letter}"]`);
+                    if (select && select.value === correctAnswers[`q${i}${letter}`]) {
+                        correct++;
+                        select.style.borderColor = '#4caf50';
+                        select.style.background = '#e8f5e9';
+                    } else if (select && select.value) {
+                        select.style.borderColor = '#f44336';
+                        select.style.background = '#ffebee';
+                    }
+                });
+            }
+
+            // Показуємо результат
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultText = document.getElementById('resultText');
+
+            const percentage = Math.round((correct / total) * 100);
+            
+            resultDiv.classList.add('show');
+            
+            if (percentage >= 80) {
+                resultDiv.className = 'result show success';
+                resultTitle.textContent = '🎉 Відмінно!';
+                resultText.textContent = `Ви правильно відповіли на ${correct} з ${total} питань (${percentage}%)`;
+            } else if (percentage >= 60) {
+                resultDiv.className = 'result show warning';
+                resultTitle.textContent = '👍 Добре!';
+                resultText.textContent = `Ви правильно відповіли на ${correct} з ${total} питань (${percentage}%)`;
+            } else {
+                resultDiv.className = 'result show error';
+                resultTitle.textContent = '📚 Потрібно повторити матеріал';
+                resultText.textContent = `Ви правильно відповіли на ${correct} з ${total} питань (${percentage}%)`;
+            }
+
+            // Прокручуємо до результату
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetQuiz() {
+            // Скидаємо радіокнопки
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Скидаємо select
+            document.querySelectorAll('select').forEach(select => {
+                select.value = '';
+                select.style.borderColor = '#e0e0e0';
+                select.style.background = 'white';
+            });
+
+            // Скидаємо стилі опцій
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Скидаємо прогрес
+            document.getElementById('progressFill').style.width = '0%';
+
+            // Ховаємо результат
+            document.getElementById('result').classList.remove('show');
+
+            // Прокручуємо наверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
